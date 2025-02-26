@@ -23,15 +23,27 @@ public class SumaMatrius extends Thread implements Notificar {
         cancel = false;
         Model model = princ.getModel();
 
-        for (int z = 0; z < model.getTamTamanyMatrius() && !cancel; z++) {
+        for (int i = 0; i < model.getTamTamanyMatrius() && !cancel; i++) {
             long temps = System.nanoTime();
+            int tamanyMatriu = model.getTamanyMatriu(i);
 
-            initMatrius(model.getTamanyMatriu(z));
+            initMatrius(tamanyMatriu);
+
             calcula();
 
-            // Calcul de temps
             temps = System.nanoTime() - temps;
             model.posarTempsSumar(temps);
+
+            double constant = temps / (tamanyMatriu ^ 2);
+            model.setConstantSuma(constant);
+
+            System.out.println(
+                    String.format(
+                            "Finalitzat el càlcul per a la suma de matrius de %dx%d en %.2f segons i amb una constant multiplicativa de %.5f",
+                            tamanyMatriu, tamanyMatriu, temps / 1e9, constant
+                    )
+            );
+
             princ.notificar(Notificacio.PINTAR);
         }
 

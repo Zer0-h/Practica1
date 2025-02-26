@@ -7,6 +7,8 @@ public class Model {
     private final ArrayList<Long> tempsSumar;
     private final ArrayList<Long> tempsProducte;
     private final ArrayList<Integer> tamanysMatrius;
+    private double constantSuma;
+    private double constantProducte;
 
     public Model() {
         tempsSumar = new ArrayList<>();
@@ -82,4 +84,19 @@ public class Model {
         return Math.max(maxTempsSumar, maxTempsProducte);
     }
 
+    public void setConstantSuma(double valor) {
+        constantSuma = valor;
+    }
+
+    public double getConstantSuma() {
+        return constantSuma;
+    }
+
+    public void setConstantProducte(double valor) {
+        constantProducte = valor;
+    }
+
+    public double getConstantProducte() {
+        return constantProducte;
+    }
 }

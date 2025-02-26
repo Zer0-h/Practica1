@@ -26,12 +26,25 @@ public class ProducteMatrius extends Thread implements Notificar {
 
         for (int i = 0; i < model.getTamTamanyMatrius() && !cancel; i++) {
             long temps = System.nanoTime();
+            int tamanyMatriu = model.getTamanyMatriu(i);
 
-            initMatrius(model.getTamanyMatriu(i));
+            initMatrius(tamanyMatriu);
+
             calcula();
 
             temps = System.nanoTime() - temps;
             model.posarTempsProducte(temps);
+
+            double constant = temps / (tamanyMatriu ^ 3);
+            model.setConstantProducte(constant);
+
+            System.out.println(
+                    String.format(
+                            "Finalitzat el càlcul per al producte de matrius de %dx%d en %.2f segons i amb una constant multiplicativa de %.5f",
+                            tamanyMatriu, tamanyMatriu, temps / 1e9, constant
+                    )
+            );
+
             princ.notificar(Notificacio.PINTAR);
         }
     }

@@ -1,68 +1,66 @@
 package vista;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 import main.Practica1;
-import model.Notificacio;
-import model.Notificar;
+import model.*;
 
 public class Vista extends JPanel implements Notificar {
 
     private Practica1 principal;
     private Grafica grafica;
+    private JLabel labelConstants;
 
     public Vista(Practica1 p) {
         principal = p;
         setPreferredSize(new Dimension(800, 600));
         setLayout(new BorderLayout());
 
-        // Crear la barra de menú
-        JMenuBar menuBar = new JMenuBar();
-
-        JMenu procMenu = new JMenu("Processos");
-
-        JMenuItem arrancarItem = new JMenuItem("Arrancar");
-        JMenuItem aturarItem = new JMenuItem("Aturar");
-
-        procMenu.add(arrancarItem);
-        procMenu.addSeparator();
-        procMenu.add(aturarItem);
-
-        menuBar.add(procMenu);
-
-        // Crear el panel principal con coordenadas absolutas
+        // Crear el panel principal
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(null); // Permite la colocación de elementos en posiciones absolutas
-        mainPanel.setBounds(0, 0, 800, 600);
-        grafica = new Grafica(800, 600, principal);
-        mainPanel.add(grafica);
+        mainPanel.setLayout(new BorderLayout());
+        grafica = new Grafica(800, 500, principal);
+        mainPanel.add(grafica, BorderLayout.CENTER);
 
-        // Agregar el menú en la parte superior
-        add(menuBar, BorderLayout.NORTH);
+        // Afegir el text de les constants
+        labelConstants = new JLabel();
+        labelConstants.setHorizontalAlignment(JLabel.CENTER);
+        labelConstants.setFont(new Font("Arial", Font.PLAIN, 14));
+        mainPanel.add(labelConstants, BorderLayout.SOUTH);
+
+        // Crear el panell per als botons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centrar els botons
+
+        // Crear els botons
+        JButton arrancarButton = new JButton("Arrancar");
+        JButton aturarButton = new JButton("Aturar");
+
+        // Afegir listeners als botons
+        arrancarButton.addActionListener(e -> principal.notificar(Notificacio.ARRANCAR));
+        aturarButton.addActionListener(e -> principal.notificar(Notificacio.ATURAR));
+
+        // Afegir els botons al panell
+        buttonPanel.add(arrancarButton);
+        buttonPanel.add(aturarButton);
+
+        // Afegir el panell de botons a la part inferior de la finestra
         add(mainPanel, BorderLayout.CENTER);
-
-        // Agregar listeners a los elementos del menú
-        arrancarItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                principal.notificar(Notificacio.ARRANCAR);
-            }
-        });
-
-        aturarItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                principal.notificar(Notificacio.ATURAR);
-            }
-        });
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     @Override
     public void notificar(Notificacio n) {
         if (n == Notificacio.PINTAR) {
             grafica.pintar();
+            actualitzarTextConstants();
         }
+    }
+
+    private void actualitzarTextConstants() {
+        Model model = principal.getModel();
+        String text = String.format("Constant Suma: %.2e ns/n² | Constant Producte: %.2e ns/n³",
+                model.getConstantSuma(), model.getConstantProducte());
+        labelConstants.setText(text);
     }
 }
