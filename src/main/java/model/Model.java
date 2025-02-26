@@ -67,4 +67,19 @@ public class Model {
     public void posarTamanyMatrius(int n) {
         tamanysMatrius.add(n);
     }
+
+    public int getMaxTamanyMatriu() {
+        return tamanysMatrius.get(tamanysMatrius.size() - 1);
+    }
+
+    public long getMaxTemps() {
+        if (tempsSumar.isEmpty() || tempsProducte.isEmpty()) {
+            return 0;
+        }
+
+        long maxTempsSumar = tempsSumar.get(tempsSumar.size() - 1);
+        long maxTempsProducte = tempsProducte.get(tempsProducte.size() - 1);
+        return Math.max(maxTempsSumar, maxTempsProducte);
+    }
+
 }
