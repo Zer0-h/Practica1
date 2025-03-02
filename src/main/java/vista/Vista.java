@@ -17,22 +17,17 @@ public class Vista extends JPanel implements Notificar {
         setLayout(new BorderLayout());
 
         // Crear el panel principal
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
         grafica = new Grafica(800, 500, principal);
         mainPanel.add(grafica, BorderLayout.CENTER);
 
         // Afegir el text de les constants
-        labelConstants = new JLabel();
-        labelConstants.setHorizontalAlignment(JLabel.CENTER);
+        labelConstants = new JLabel("", JLabel.CENTER);
         labelConstants.setFont(new Font("Arial", Font.PLAIN, 14));
         mainPanel.add(labelConstants, BorderLayout.SOUTH);
 
         // Crear el panell per als botons
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centrar els botons
-
-        // Crear els botons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton arrancarButton = new JButton("Arrancar");
         JButton aturarButton = new JButton("Aturar");
 
