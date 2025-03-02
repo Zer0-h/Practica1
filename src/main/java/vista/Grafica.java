@@ -3,13 +3,11 @@ package vista;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.List;
 import javax.swing.JPanel;
-import main.Practica1;
-import model.Model;
 
 public class Grafica extends JPanel {
 
-    private final Practica1 prin;
     private final Color colorLinea = Color.BLACK;
     private final Color colorSumar = Color.GREEN;
     private final Color colorProducte = Color.RED;
@@ -17,12 +15,19 @@ public class Grafica extends JPanel {
     private final int divisionAxis = 10;
     private final Font font = new Font("Arial", Font.PLAIN, 12);
 
-    public Grafica(int w, int h, Practica1 p) {
-        prin = p;
+    private List<Integer> tamanysMatrius;
+    private List<Long> tempsSumar;
+    private List<Long> tempsProducte;
+
+    public Grafica(int w, int h) {
         this.setBounds(0, 0, w, h);
     }
 
-    public void pintar() {
+    public void pintar(List<Integer> tamanysMatrius, List<Long> tempsSumar, List<Long> tempsProducte) {
+        this.tamanysMatrius = tamanysMatrius;
+        this.tempsSumar = tempsSumar;
+        this.tempsProducte = tempsProducte;
+
         if (this.getGraphics() != null) {
             paintComponent(this.getGraphics());
         }
@@ -31,7 +36,10 @@ public class Grafica extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Model model = prin.getModel();
+
+        if (tamanysMatrius == null || tempsSumar == null || tempsProducte == null) {
+            return; // No data to paint
+        }
 
         int width = this.getWidth() - 1;
         int height = this.getHeight() - 24;
@@ -45,24 +53,20 @@ public class Grafica extends JPanel {
         g.drawLine(50, height - 50, 50, 30); // Y-axis
         g.drawLine(50, height - 50, width - 30, height - 50); // X-axis
 
-        int maxElement = model.getMaxTamanyMatriu();
-        long maxTime = model.getMaxTemps();
+        int maxElement = tamanysMatrius.isEmpty() ? 0 : tamanysMatrius.get(tamanysMatrius.size() - 1);
+        long maxTime = getMaxTime();
 
         if (maxElement == 0 || maxTime == 0) {
-            return; // No pintam
+            return;
         }
 
-        // Label y en segons
+        // Labels
         drawYAxisLabels(g, height, maxTime);
-
-        // Label x tamany matriu
         drawXAxisLabels(g, width, height, maxElement);
 
-        // Pintam els temps de la sumar
-        drawSumar(g, model, width, height, maxElement, maxTime);
-
-        // Pintam els temps del producte
-        drawProducte(g, model, width, height, maxElement, maxTime);
+        // Plot data points
+        drawSumar(g, width, height, maxElement, maxTime);
+        drawProducte(g, width, height, maxElement, maxTime);
     }
 
     private void drawYAxisLabels(Graphics g, int height, long maxTime) {
@@ -71,7 +75,7 @@ public class Grafica extends JPanel {
             int y = height - 50 - (i * (height - 80) / divisionAxis);
             double timeValue = (maxTime * i) / (double) divisionAxis / 1e9;
             g.drawString(String.format("%.2f s", timeValue), 10, y + 5);
-            g.drawLine(45, y, 50, y); // Tick mark
+            g.drawLine(45, y, 50, y);
         }
     }
 
@@ -85,13 +89,17 @@ public class Grafica extends JPanel {
         }
     }
 
-    private void drawSumar(Graphics g, Model model, int width, int height, int maxElement, long maxTime) {
+    private void drawSumar(Graphics g, int width, int height, int maxElement, long maxTime) {
+        if (tempsSumar.isEmpty()) {
+            return;
+        }
+
         int prevX = 50;
         int prevY = height - 50;
 
-        for (int i = 0; i < model.getTamTempsSumar(); i++) {
-            int x = 50 + (model.getTamanyMatriu(i) * (width - 80) / maxElement);
-            int y = height - 50 - ((int) (model.getTempsSumar(i) * (height - 80) / maxTime));
+        for (int i = 0; i < tempsSumar.size(); i++) {
+            int x = 50 + (tamanysMatrius.get(i) * (width - 80) / maxElement);
+            int y = height - 50 - ((int) (tempsSumar.get(i) * (height - 80) / maxTime));
 
             g.setColor(colorSumar);
             g.fillOval(x - tamanyPunt / 2, y - tamanyPunt / 2, tamanyPunt, tamanyPunt);
@@ -104,13 +112,17 @@ public class Grafica extends JPanel {
         }
     }
 
-    private void drawProducte(Graphics g, Model model, int width, int height, int maxElement, long maxTime) {
+    private void drawProducte(Graphics g, int width, int height, int maxElement, long maxTime) {
+        if (tempsProducte.isEmpty()) {
+            return;
+        }
+
         int prevX = 50;
         int prevY = height - 50;
 
-        for (int i = 0; i < model.getTamTempsProducte(); i++) {
-            int x = 50 + (model.getTamanyMatriu(i) * (width - 80) / maxElement);
-            int y = height - 50 - ((int) (model.getTempsProducte(i) * (height - 80) / maxTime));
+        for (int i = 0; i < tempsProducte.size(); i++) {
+            int x = 50 + (tamanysMatrius.get(i) * (width - 80) / maxElement);
+            int y = height - 50 - ((int) (tempsProducte.get(i) * (height - 80) / maxTime));
 
             g.setColor(colorProducte);
             g.fillOval(x - tamanyPunt / 2, y - tamanyPunt / 2, tamanyPunt, tamanyPunt);
@@ -121,5 +133,16 @@ public class Grafica extends JPanel {
             prevX = x;
             prevY = y;
         }
+    }
+
+    private long getMaxTime() {
+        if (tempsSumar.isEmpty() && tempsProducte.isEmpty()) {
+            return 0;
+        }
+
+        long maxTempsSumar = tempsSumar.isEmpty() ? 0 : tempsSumar.get(tempsSumar.size() - 1);
+        long maxTempsProducte = tempsProducte.isEmpty() ? 0 : tempsProducte.get(tempsProducte.size() - 1);
+
+        return Math.max(maxTempsSumar, maxTempsProducte);
     }
 }

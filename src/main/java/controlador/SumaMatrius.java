@@ -1,6 +1,5 @@
 package controlador;
 
-import main.Practica1;
 import model.Model;
 import model.Notificacio;
 import model.Notificar;
@@ -8,19 +7,19 @@ import model.Notificar;
 public class SumaMatrius extends Thread implements Notificar {
 
     private boolean cancel;
-    private final Practica1 princ;
+    private final Controlador controlador;
     private int[][] matriu1;
     private int[][] matriu2;
     private int[][] matriuSumar;
 
-    public SumaMatrius(Practica1 p) {
-        princ = p;
+    public SumaMatrius(Controlador c) {
+        controlador = c;
     }
 
     @Override
     public void run() {
         cancel = false;
-        Model model = princ.getModel();
+        Model model = controlador.getModel();
 
         for (int i = 0; i < model.getTamTamanyMatrius() && !cancel; i++) {
             long temps = System.nanoTime();
@@ -46,9 +45,8 @@ public class SumaMatrius extends Thread implements Notificar {
                     )
             );
 
-            princ.notificar(Notificacio.PINTAR);
+            controlador.notificar(Notificacio.PINTAR);
         }
-
     }
 
     private void calcula() {

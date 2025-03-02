@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Model {
@@ -58,11 +59,11 @@ public class Model {
     }
 
     public long getTempsSumar(int i) {
-        return (tempsSumar.get(i));
+        return tempsSumar.get(i);
     }
 
     public long getTempsProducte(int i) {
-        return (tempsProducte.get(i));
+        return tempsProducte.get(i);
     }
 
     public void posarTempsSumar(long t) {
@@ -78,16 +79,16 @@ public class Model {
     }
 
     public int getMaxTamanyMatriu() {
-        return tamanysMatrius.get(tamanysMatrius.size() - 1);
+        return tamanysMatrius.isEmpty() ? 0 : tamanysMatrius.get(tamanysMatrius.size() - 1);
     }
 
     public long getMaxTemps() {
-        if (tempsSumar.isEmpty() || tempsProducte.isEmpty()) {
+        if (tempsSumar.isEmpty() && tempsProducte.isEmpty()) {
             return 0;
         }
 
-        long maxTempsSumar = tempsSumar.get(tempsSumar.size() - 1);
-        long maxTempsProducte = tempsProducte.get(tempsProducte.size() - 1);
+        long maxTempsSumar = tempsSumar.isEmpty() ? 0 : tempsSumar.get(tempsSumar.size() - 1);
+        long maxTempsProducte = tempsProducte.isEmpty() ? 0 : tempsProducte.get(tempsProducte.size() - 1);
         return Math.max(maxTempsSumar, maxTempsProducte);
     }
 
@@ -105,5 +106,17 @@ public class Model {
 
     public double getConstantProducte() {
         return constantProducte;
+    }
+
+    public List<Integer> getTamanyMatrius() {
+        return new ArrayList<>(tamanysMatrius);
+    }
+
+    public List<Long> getTempsSumar() {
+        return new ArrayList<>(tempsSumar);
+    }
+
+    public List<Long> getTempsProducte() {
+        return new ArrayList<>(tempsProducte);
     }
 }

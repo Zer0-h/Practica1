@@ -1,6 +1,5 @@
 package controlador;
 
-import main.Practica1;
 import model.Model;
 import model.Notificacio;
 import model.Notificar;
@@ -12,16 +11,16 @@ public class ProducteMatrius extends Thread implements Notificar {
     private int[][] matriuProducte;
 
     private boolean cancel;
-    private final Practica1 princ;
+    private final Controlador controlador;
 
-    public ProducteMatrius(Practica1 p) {
-        princ = p;
+    public ProducteMatrius(Controlador c) {
+        controlador = c;
     }
 
     @Override
     public void run() {
         cancel = false;
-        Model model = princ.getModel();
+        Model model = controlador.getModel();
 
         for (int i = 0; i < model.getTamTamanyMatrius() && !cancel; i++) {
             long temps = System.nanoTime();
@@ -47,7 +46,7 @@ public class ProducteMatrius extends Thread implements Notificar {
                     )
             );
 
-            princ.notificar(Notificacio.PINTAR);
+            controlador.notificar(Notificacio.PINTAR);
         }
     }
 

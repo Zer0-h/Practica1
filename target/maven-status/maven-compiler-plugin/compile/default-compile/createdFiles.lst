@@ -3,7 +3,8 @@ controlador\SumaMatrius.class
 main\Practica1.class
 model\Notificar.class
 vista\Grafica.class
-main\Practica1$1.class
+controlador\Controlador$1.class
 controlador\ProducteMatrius.class
+controlador\Controlador.class
 model\Notificacio.class
 vista\Vista.class

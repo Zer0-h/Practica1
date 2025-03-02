@@ -1,24 +1,23 @@
 package vista;
 
+import controlador.Controlador;
 import java.awt.*;
+import java.util.List;
 import javax.swing.*;
-import main.Practica1;
 import model.*;
 
-public class Vista extends JPanel implements Notificar {
+public class Vista extends JPanel {
 
-    private Practica1 principal;
-    private Grafica grafica;
-    private JLabel labelConstants;
+    private final Grafica grafica;
+    private final JLabel labelConstants;
 
-    public Vista(Practica1 p) {
-        principal = p;
+    public Vista(Controlador controlador) {
         setPreferredSize(new Dimension(800, 600));
         setLayout(new BorderLayout());
 
         // Crear el panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
-        grafica = new Grafica(800, 500, principal);
+        grafica = new Grafica(800, 500);
         mainPanel.add(grafica, BorderLayout.CENTER);
 
         // Afegir el text de les constants
@@ -32,10 +31,10 @@ public class Vista extends JPanel implements Notificar {
         JButton aturarButton = new JButton("Aturar");
 
         // Afegir listeners als botons
-        arrancarButton.addActionListener(e -> principal.notificar(Notificacio.ARRANCAR));
-        aturarButton.addActionListener(e -> principal.notificar(Notificacio.ATURAR));
+        arrancarButton.addActionListener(e -> controlador.notificar(Notificacio.ARRANCAR));
+        aturarButton.addActionListener(e -> controlador.notificar(Notificacio.ATURAR));
 
-        // Afegir els botons al panell
+        // Els listeners dels botons ara seran gestionats des del Controlador
         buttonPanel.add(arrancarButton);
         buttonPanel.add(aturarButton);
 
@@ -44,18 +43,16 @@ public class Vista extends JPanel implements Notificar {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    @Override
-    public void notificar(Notificacio n) {
-        if (n == Notificacio.PINTAR) {
-            grafica.pintar();
-            actualitzarTextConstants();
-        }
+    public void actualizarVista(List<Integer> tamanysMatrius, List<Long> tempsSumar, List<Long> tempsProducte, double constantSuma, double constantProducte) {
+        // Actualitzar gràfica
+        grafica.pintar(tamanysMatrius, tempsSumar, tempsProducte);
+
+        // Actualitzar el text de les constants
+        String text = String.format("Constant Suma: %.2e ns/n² | Constant Producte: %.2e ns/n³", constantSuma, constantProducte);
+        labelConstants.setText(text);
     }
 
-    private void actualitzarTextConstants() {
-        Model model = principal.getModel();
-        String text = String.format("Constant Suma: %.2e ns/n² | Constant Producte: %.2e ns/n³",
-                model.getConstantSuma(), model.getConstantProducte());
-        labelConstants.setText(text);
+    public Grafica getGrafica() {
+        return grafica;
     }
 }
