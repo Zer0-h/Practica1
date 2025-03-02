@@ -36,10 +36,7 @@ public class Practica1 implements Notificar {
 
     private void preparar() {
         procesos = new ArrayList<>();
-        model.clear();
-        for (int i = 100; i < 2000; i = i + 100) {
-            model.posarTamanyMatrius(i);
-        }
+        model.prepararDades();
     }
 
     @Override

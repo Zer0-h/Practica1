@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Model {
 
@@ -9,29 +10,35 @@ public class Model {
     private final ArrayList<Integer> tamanysMatrius;
     private double constantSuma;
     private double constantProducte;
+    private final Random rand;
 
     public Model() {
         tempsSumar = new ArrayList<>();
         tempsProducte = new ArrayList<>();
         tamanysMatrius = new ArrayList<>();
+        rand = new Random();
     }
 
-    public void clear() {
+    public void prepararDades() {
         tempsSumar.clear();
         tempsProducte.clear();
         tamanysMatrius.clear();
+        for (int i = 100; i < 2000; i += 100) {
+            tamanysMatrius.add(i);
+        }
     }
 
-    public ArrayList<Long> getTempsSumar() {
-        return tempsSumar;
-    }
+    public int[][][] generarMatrius(int n) {
+        int[][] matriu1 = new int[n][n];
+        int[][] matriu2 = new int[n][n];
 
-    public ArrayList<Long> getTempsProducte() {
-        return tempsSumar;
-    }
-
-    public ArrayList<Integer> getTamanyMatrius() {
-        return tamanysMatrius;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matriu1[i][j] = rand.nextInt(10) * 10;
+                matriu2[i][j] = rand.nextInt(10) * 10;
+            }
+        }
+        return new int[][][]{matriu1, matriu2};
     }
 
     public int getTamTempsSumar() {
