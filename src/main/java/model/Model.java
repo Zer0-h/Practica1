@@ -73,10 +73,6 @@ public class Model {
         tempsProducte.add(t);
     }
 
-    public void posarTamanyMatrius(int n) {
-        tamanysMatrius.add(n);
-    }
-
     public int getMaxTamanyMatriu() {
         return tamanysMatrius.get(tamanysMatrius.size() - 1);
     }
