@@ -5,6 +5,10 @@ import javax.swing.*;
 import main.Practica1;
 import model.*;
 
+/**
+ *
+ * @author tonitorres
+ */
 public class Vista extends JPanel implements Notificar {
 
     private Practica1 principal;

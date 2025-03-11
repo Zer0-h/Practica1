@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 import main.Practica1;
 import model.Model;
 
+/**
+ *
+ * @author tonitorres
+ */
 public class Grafica extends JPanel {
 
     private final Practica1 prin;

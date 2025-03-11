@@ -3,6 +3,10 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ *
+ * @author tonitorres
+ */
 public class Model {
 
     private final ArrayList<Long> tempsSumar;

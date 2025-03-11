@@ -9,6 +9,10 @@ import model.Notificacio;
 import model.Notificar;
 import vista.Vista;
 
+/**
+ *
+ * @author tonitorres
+ */
 public class Practica1 implements Notificar {
 
     private Vista vista;

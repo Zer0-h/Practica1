@@ -5,6 +5,10 @@ import model.Model;
 import model.Notificacio;
 import model.Notificar;
 
+/**
+ *
+ * @author tonitorres
+ */
 public class SumaMatrius extends Thread implements Notificar {
 
     private boolean cancel;
